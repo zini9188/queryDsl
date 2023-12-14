@@ -1,6 +1,7 @@
 package com.dsl.querydsl;
 
-import com.dsl.querydsl.entity.*;
+import com.dsl.querydsl.entity.Member;
+import com.dsl.querydsl.entity.Team;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -63,6 +64,19 @@ public class QueryDslBasicTest {
                 .select(member)
                 .from(member)
                 .where(member.username.eq("member1"))
+                .fetchOne();
+
+        assertThat(findMember.getUsername()).isEqualTo("member1");
+    }
+
+    @Test
+    public void search() {
+        Member findMember = queryFactory
+                .selectFrom(member)
+                .where(
+                        member.username.eq("member1"),
+                        member.age.eq(10)
+                )
                 .fetchOne();
 
         assertThat(findMember.getUsername()).isEqualTo("member1");
